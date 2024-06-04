@@ -327,7 +327,7 @@ int main(int argc, char* argv[]) {
         for(uint32_t x = 0; x < header.chunk_info.count_x; x += 4) {
             if(aabb) {
                 double curr_x = ((int)(header.chunk_info.start_x + x)) * 64.0, next_x = ((int)(header.chunk_info.start_x + x + 4)) * 64.0;
-                warpgate::utils::AABB strip_aabb({curr_x, 0.0, min_z, 1.0}, {next_x, 1024.0, max_z, 1.0});
+                warpgate::utils::AABB strip_aabb({min_z, 0.0, curr_x, 1.0}, {max_z, 1024.0, next_x, 1.0});
                 if(!aabb->overlaps(strip_aabb)) {
                     logger::debug("Skipping x={}", (int)(header.chunk_info.start_x + x));
                     continue;
@@ -335,7 +335,7 @@ int main(int argc, char* argv[]) {
             }
             for(uint32_t y = 0; y < header.chunk_info.count_y; y += 4) {
                 if(aabb) {
-                    glm::dvec4 minimum{((int)(header.chunk_info.start_x + x)) * 64.0, 0.0, ((int)(header.chunk_info.start_y + y)) * 64.0, 1.0};
+                    glm::dvec4 minimum{((int)(header.chunk_info.start_y + y)) * 64.0, 0.0, ((int)(header.chunk_info.start_x + x)) * 64.0, 1.0};
                     glm::dvec4 maximum = minimum + glm::dvec4{256.0, 1024.0, 256.0, 0.0};
                     warpgate::utils::AABB strip_aabb(minimum, maximum);
                     if(!aabb->overlaps(strip_aabb)) {
