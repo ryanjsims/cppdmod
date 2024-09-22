@@ -100,6 +100,4 @@ The magic may be more than 4 bytes, though typically file magics are 4 bytes lon
 The output files will be named `{namehash}.bin` in the output directory.
 
 ## Known issues
-* Zone converter does not properly orient actors that are rotated on all three axes.
-
 * Some models have bones that are not detailed by the MRN files, so their hierarchy will not be properly exported, and their pose will need to be reset in Blender before they appear correct.
