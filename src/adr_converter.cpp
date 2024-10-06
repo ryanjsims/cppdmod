@@ -81,7 +81,6 @@ void build_argument_parser(argparse::ArgumentParser &parser, int &log_level) {
         .default_value(false)
         .implicit_value(true)
         .nargs(0);
-    
 }
 
 void load_asset(synthium::Manager &manager, std::string input_str, std::vector<uint8_t> &data_vector, std::span<uint8_t> &data_span, std::shared_ptr<uint8_t[]> &data) {
@@ -153,7 +152,7 @@ int main(int argc, const char* argv[]) {
     logger::set_level(logger::level::level_enum(log_level));
 
     std::string input_str = parser.get<std::string>("input_file");
-    
+
     logger::info("Converting file {} using adr_converter {}", input_str, WARPGATE_VERSION);
     uint32_t image_processor_thread_count = parser.get<uint32_t>("--threads");
     std::string path = parser.get<std::string>("--assets-directory");

@@ -78,6 +78,9 @@ std::string Parameter::semantic_texture_type(Semantic semantic) {
 
 Parameter::WarpgateSemantic Parameter::texture_common_semantic(int32_t semantic) {
     switch(Semantic(semantic)) {
+    case Semantic::Color:
+    case Semantic::Color1:
+    case Semantic::Color2:
     case Semantic::Diffuse:
     case Semantic::BaseDiffuse:
     case Semantic::baseDiffuse:

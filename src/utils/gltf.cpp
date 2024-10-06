@@ -445,11 +445,17 @@ void utils::gltf::dmat::process_images(
 
         switch (semantic)
         {
+        case Semantic::Color:
+        case Semantic::Color1:
+        case Semantic::Color2:
+        case Semantic::Color3:
+        case Semantic::color:
         case Semantic::Diffuse:
         case Semantic::BaseDiffuse:
         case Semantic::baseDiffuse:
         case Semantic::diffuseTexture:
         case Semantic::DiffuseB:
+        case Semantic::ExtraTint:
         case Semantic::HoloTexture:
         case Semantic::DecalTint:
         case Semantic::TilingTint:
