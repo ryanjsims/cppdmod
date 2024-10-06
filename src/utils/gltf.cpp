@@ -136,6 +136,10 @@ int utils::gltf::dme::add_mesh_to_gltf(tinygltf::Model &gltf, const DME &dme, ui
         std::string type = entry.at("type").get<std::string>();
         std::string usage = entry.at("usage").get<std::string>();
         int stream = entry.at("stream").get<int>();
+        if(mesh->bytes_per_vertex(stream) == offsets.at(stream)) {
+            logger::info("Skipping accessor, stream {} full", stream);
+            continue;
+        }
         if(usage == "Binormal") {
             offsets.at(stream) += utils::materials3::sizes.at(type);
             continue;
@@ -697,9 +701,13 @@ std::vector<uint8_t> utils::gltf::dme::expand_vertex_stream(
                             .get<uint32_t>();
     logger::debug("Data stride: {}", stride);
 
-    if(mesh->bytes_per_vertex(stream) != stride) {
-        logger::error("VertexStream stride {} != InputLayout stride {}", mesh->bytes_per_vertex(stream), stride);
+    if(mesh->bytes_per_vertex(stream) > stride) {
+        logger::error("VertexStream stride {} > InputLayout stride {}", mesh->bytes_per_vertex(stream), stride);
         std::exit(32);
+    }
+    if(mesh->bytes_per_vertex(stream) < stride) {
+        logger::info("VertexStream stride {} < InputLayout stride {}", mesh->bytes_per_vertex(stream), stride);
+        stride = mesh->bytes_per_vertex(stream);
     }
     std::vector<std::pair<uint32_t, bool>> offsets;
     bool conversion_required = false;
@@ -723,6 +731,8 @@ std::vector<uint8_t> utils::gltf::dme::expand_vertex_stream(
         }
         if(byte_stride >= mesh->bytes_per_vertex(stream)) {
             logger::debug("Skipping entry since byte stride already filled.");
+            uint32_t size = utils::materials3::sizes.at(entry.at("type").get<std::string>());
+            layout.at("sizes").at(std::to_string(stream)) = layout.at("sizes").at(std::to_string(stream)) - size;
             continue;
         }
         logger::debug("{}", entry.dump());
